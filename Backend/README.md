@@ -34,17 +34,12 @@ Send a JSON object with the following structure:
 ```
 
 ### Responses
-
-- **201 Created**
-  - User registered s uccessfully.
-  - Returns: `{ "token": "JWT_TOKEN", ... }`
-
-  #### Example Response
+- **201 Created**: User registered successfully.
   ```json
   {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "token": "JWT_TOKEN",
     "user": {
-      "id": "64e8f7c2b2e4b2a1d8c1e123",
+      "id": "user_id",
       "fullname": {
         "firstname": "John",
         "lastname": "Doe"
@@ -53,13 +48,144 @@ Send a JSON object with the following structure:
     }
   }
   ```
+- **400 Bad Request**: Validation failed (e.g., missing or invalid fields).
+  ```json
+  {
+    "errors": ["Error details here"]
+  }
+  ```
+
+---
+
+## POST `/users/login`
+
+### Purpose
+Authenticate a user and return a JWT token.
+
+### Request Body
+Send a JSON object with the following fields:
+
+```json
+{
+  "email": "string (valid email, required)",
+  "password": "string (min 6 characters, required)"
+}
+```
+
+### Example Request
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "securePassword123"
+}
+```
+
+### Responses
+- **200 OK**: User authenticated successfully.
+  ```json
+  {
+    "token": "JWT_TOKEN",
+    "user": {
+      "id": "user_id",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com"
+    }
+  }
+  ```
+- **400 Bad Request**: Validation failed (e.g., missing or invalid fields).
+  ```json
+  {
+    "errors": ["Error details here"]
+  }
+  ```
+- **401 Unauthorized**: Invalid email or password.
+  ```json
+  {
+    "message": "Invalid email or password"
+  }
+  ```
+  }
+  ```
 
 - **400 Bad Request**
   - Validation failed (missing or invalid fields).
   - Returns: `{ "errors": [ ... ] }`
 
+- **401 Unauthorized**
+  - Invalid email or password.
+  - Returns: `{ "message": "Invalid email or password" }`
+
 ### Notes
 
-- All fields are required.
-- Password must be at least 6 characters.
-- Email must be unique and valid.
+- Both fields are required.
+- Returns a JWT token on successful authentication.
+
+---
+
+## GET `/users/profile`
+
+### Description
+Retrieves the profile information for the currently authenticated user.
+
+### Request Headers
+
+-   `Authorization`: `Bearer <token>` (JWT token obtained after login)
+
+### Responses
+
+-   **200 OK**
+    -   Successfully retrieved user profile.
+    -   Returns:
+        ```json
+        {
+            "id": "user_id",
+            "email": "user@example.com",
+            "fullname": {
+                "firstname": "John",
+                "lastname": "Doe"
+            },
+            "phoneNumber": "123-456-7890",
+            "createdAt": "timestamp",
+            "updatedAt": "timestamp"
+        }
+        ```
+-   **401 Unauthorized**
+    -   Invalid or missing JWT token.
+    -   Returns: `{ "message": "Unauthorized" }`
+
+### Notes
+
+-   Requires a valid JWT token in the `Authorization` header.
+
+---
+
+## GET `/users/logout`
+
+### Description
+Logs out the current user by invalidating the JWT token.
+
+### Request Headers
+
+-   `Authorization`: `Bearer <token>` (JWT token obtained after login)
+
+### Responses
+
+-   **200 OK**
+    -   Successfully logged out user.
+    -   Returns:
+        ```json
+        {
+            "message": "Logout successfully"
+        }
+        ```
+-   **401 Unauthorized**
+    -   Invalid or missing JWT token.
+    -   Returns: `{ "message": "Unauthorized" }`
+
+### Notes
+
+-   Requires a valid JWT token in the `Authorization` header.
+-   The JWT token is blacklisted after logout.
