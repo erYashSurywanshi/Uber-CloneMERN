@@ -107,16 +107,6 @@ Send a JSON object with the following fields:
     "message": "Invalid email or password"
   }
   ```
-  }
-  ```
-
-- **400 Bad Request**
-  - Validation failed (missing or invalid fields).
-  - Returns: `{ "errors": [ ... ] }`
-
-- **401 Unauthorized**
-  - Invalid email or password.
-  - Returns: `{ "message": "Invalid email or password" }`
 
 ### Notes
 
@@ -189,3 +179,84 @@ Logs out the current user by invalidating the JWT token.
 
 -   Requires a valid JWT token in the `Authorization` header.
 -   The JWT token is blacklisted after logout.
+
+---
+
+## POST `/captains/register`
+
+### Description
+Registers a new captain in the system.
+
+### Request Body
+
+Send a JSON object with the following structure:
+
+```json
+{
+  "fullname": {
+    "firstname": "string (min 3 chars, required)",
+    "lastname": "string (min 3 chars )"
+  },
+  "email": "string (valid email, required)",
+  "password": "string (min 6 chars, required)",
+  "vehicle": {
+    "color": "string (min 3 chars, required)",
+    "plate": "string (min 3 chars, required)",
+    "capacity": "number (required)",
+    "vehicleType": "string (min 3 chars, required)"
+  }
+}
+```
+
+### Example
+
+```json
+{
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "password": "securePassword123",
+  "vehicle": {
+    "color": "red",
+    "plate": "ABC-123",
+    "capacity": 4,
+    "vehicleType": "sedan"
+  }
+}
+```
+
+### Responses
+- **201 Created**: Captain registered successfully.
+  ```json
+  {
+    "token": "JWT_TOKEN",
+    "captain": {
+      "id": "captain_id",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com",
+      "vehicle": {
+        "color": "red",
+        "plate": "ABC-123",
+        "capacity": 4,
+        "vehicleType": "sedan"
+      }
+    }
+  }
+  ```
+- **400 Bad Request**: Validation failed (e.g., missing or invalid fields).
+  ```json
+  {
+    "errors": ["Error details here"]
+  }
+  ```
+- **409 Conflict**: Captain already exists.
+  ```json
+  {
+    "error": "Captain already exists"
+  }
+  ```
