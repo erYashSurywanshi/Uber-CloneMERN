@@ -1,0 +1,6 @@
+@import "tailwindcss";
+/* Ensure the following styles are applied globally if needed */
+html, body, #root {
+  height: 100%; /* Ensure the root container occupies full height */
+}
+

@@ -260,3 +260,145 @@ Send a JSON object with the following structure:
     "error": "Captain already exists"
   }
   ```
+
+---
+
+## POST `/captains/login`
+
+### Description
+Authenticates a captain and returns a JWT token.
+
+### Request Body
+Send a JSON object with the following fields:
+
+```json
+{
+  "email": "string (valid email, required)",
+  "password": "string (min 6 characters, required)"
+}
+```
+
+### Example Request
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "securePassword123"
+}
+```
+
+### Responses
+- **200 OK**: Captain authenticated successfully.
+  ```json
+  {
+    "token": "JWT_TOKEN",
+    "captain": {
+      "id": "captain_id",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com",
+      "vehicle": {
+        "color": "red",
+        "plate": "ABC-123",
+        "capacity": 4,
+        "vehicleType": "sedan"
+      }
+    }
+  }
+  ```
+- **400 Bad Request**: Validation failed (e.g., missing or invalid fields).
+  ```json
+  {
+    "errors": ["Error details here"]
+  }
+  ```
+- **401 Unauthorized**: Invalid email or password.
+  ```json
+  {
+    "error": "Invalid credentials"
+  }
+  ```
+- **404 Not Found**: Captain not found.
+  ```json
+  {
+    "error": "Captain not found"
+  }
+  ```
+
+### Notes
+
+- Both fields are required.
+- Returns a JWT token on successful authentication.
+
+---
+
+## GET `/captains/profile`
+
+### Description
+Retrieves the profile information for the currently authenticated captain.
+
+### Request Headers
+
+-   `Authorization`: `Bearer <token>` (JWT token obtained after login)
+
+### Responses
+
+-   **200 OK**
+    -   Successfully retrieved captain profile.
+    -   Returns:
+        ```json
+        {
+            "id": "captain_id",
+            "email": "captain@example.com",
+            "fullname": {
+                "firstname": "John",
+                "lastname": "Doe"
+            },
+            "vehicle": {
+                "color": "red",
+                "plate": "ABC-123",
+                "capacity": 4,
+                "vehicleType": "sedan"
+            },
+            "createdAt": "timestamp",
+            "updatedAt": "timestamp"
+        }
+        ```
+-   **401 Unauthorized**
+    -   Invalid or missing JWT token.
+    -   Returns: `{ "message": "Unauthorized" }`
+
+### Notes
+
+-   Requires a valid JWT token in the `Authorization` header.
+
+---
+
+## GET `/captains/logout`
+
+### Description
+Logs out the current captain by invalidating the JWT token.
+
+### Request Headers
+
+-   `Authorization`: `Bearer <token>` (JWT token obtained after login)
+
+### Responses
+
+-   **200 OK**
+    -   Successfully logged out captain.
+    -   Returns:
+        ```json
+        {
+            "message": "Logout successfully"
+        }
+        ```
+-   **401 Unauthorized**
+    -   Invalid or missing JWT token.
+    -   Returns: `{ "message": "Unauthorized" }`
+
+### Notes
+
+-   Requires a valid JWT token in the `Authorization` header.
+-   The JWT token is blacklisted after logout.
