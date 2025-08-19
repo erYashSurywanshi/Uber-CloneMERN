@@ -1,19 +1,40 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import React, { useContext, useState } from "react"; // Added useContext
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { UserDataContext } from "../Context/UserContext";
 
 const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userData, setUserData] = useState({});
 
-  const handleSubmit = (e) => {
+  const { setUser } = useContext(UserDataContext); // Fixed UserContext usage
+
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setUserData({
+    const newUser = {
       email: email,
       password: password,
-    });
-    console.log(userData);
+    };
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/users/login`,
+        newUser
+      );
+
+      if (response.status === 200) {
+        // Ensure correct status code is checked
+        const data = response.data;
+
+        setUser(data.user);
+        localStorage.setItem("token", data.token); // Store token in local storage
+        navigate("/home"); // Navigate to the home page
+      }
+    } catch (error) {
+      console.error("Error during signup:", error); // Log full error details
+    }
     setEmail("");
     setPassword("");
   };
@@ -62,8 +83,9 @@ const UserLogin = () => {
         </p>
       </form>
       <Link
-      to={"/Captain-login"}
-       className="bg-[#10b461] flex items-center justify-center text-white cursor-pointer mb-6 font-semibold rounded  px-4 py-2 w-full text-lg ">
+        to={"/Captain-login"}
+        className="bg-[#10b461] flex items-center justify-center text-white cursor-pointer mb-6 font-semibold rounded  px-4 py-2 w-full text-lg "
+      >
         Login as Captain
       </Link>
     </div>

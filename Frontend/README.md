@@ -40,8 +40,25 @@ This is the frontend of the UberClone application built using React, Vite, and T
 Frontend/
 ├── public/                # Static assets
 ├── src/                   # Source code
+│   ├── components/        # Reusable components
+│   │   ├── ConfirmRIde.jsx
+│   │   ├── LoactionSerachPanel.jsx
+│   │   ├── LookingForDriver.jsx
+│   │   ├── VehiclePanle.jsx
+│   │   └── WaittingforDriver.jsx
+│   ├── Context/           # Context for managing global state
+│   │   ├── CaptainContext.jsx
+│   │   └── UserContext.jsx
 │   ├── pages/             # React components for pages
-│   ├── UserContext/       # Context for managing user state
+│   │   ├── CaptainHome.jsx
+│   │   ├── CaptainLogin.jsx
+│   │   ├── CaptainSignup.jsx
+│   │   ├── Home.jsx
+│   │   ├── Start.jsx
+│   │   ├── UserLogin.jsx
+│   │   ├── UserLogout.jsx
+│   │   ├── UserProtectwrapper.jsx
+│   │   └── UserSignup.jsx
 │   ├── App.jsx            # Main application component
 │   ├── main.jsx           # Entry point for the application
 │   ├── index.css          # Global styles
@@ -55,12 +72,25 @@ Frontend/
 
 - **React Router**: For navigation between pages.
 - **TailwindCSS**: For styling the application.
-- **Context API**: For managing global user state.
+- **Context API**: For managing global user and captain states.
+- **GSAP Animations**: Smooth animations for UI transitions.
+- **Dynamic Panels**: Includes panels for vehicle selection, ride confirmation, driver search, and waiting for the driver.
 
 ## Notes
 
 - Ensure the backend server is running to test API integrations.
 - Update the API base URL in the application if necessary.
+
+## Recent Updates
+
+- Added `WaittingforDriver` component for displaying the waiting status for a driver.
+- Integrated `WaittingforDriver` into `Home.jsx` to complete the ride flow.
+- Enhanced animations using GSAP for smoother transitions between panels.
+- Updated `Home.jsx` to include dynamic panels for better user experience, including:
+  - **Vehicle Selection Panel**: Allows users to select a vehicle.
+  - **Ride Confirmation Panel**: Confirms the ride details.
+  - **Looking for Driver Panel**: Displays the status of finding a driver.
+  - **Waiting for Driver Panel**: Displays the assigned driver's details and status.
 
 # React + Vite
 

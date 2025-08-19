@@ -1,37 +1,66 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { UserDataContext } from "../Context/UserContext";
 
 const UserSignup = () => {
-const [firstname, setfirstname] = useState("");
-const [lastname, setlastname] = useState("");
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
-const [userData, setUserData] = useState({});
+  const [firstname, setfirstname] = useState("");
+  const [lastname, setlastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // Add state for error messages
 
-  const handleSubmit = (e) => {
+  const { setUser } = useContext(UserDataContext);
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setUserData({
-      FullNmae:{
-        firstname:firstname,
-        lastname:lastname
+    const newUser = {
+      fullname: {
+        firstname: firstname,
+        lastname: lastname,
       },
       email: email,
-      password: password
-    })
-    console.log(userData);
-    setEmail('')
-    setPassword('')
-    setfirstname('') 
-    setlastname('')
-  }
+      password: password,
+    };
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/users/register`,
+        newUser
+      );
+
+      if (response.status === 201 || response.status === 200) {
+        const data = response.data;
+        setUser(data.user);
+        localStorage.setItem("token", data.token); // Store token in local storage
+        navigate("/home");
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      if (error.response && error.response.data.errors) {
+        // Display validation errors from the backend
+        setErrorMessage(
+          error.response.data.errors.map((err) => err.msg).join(", ")
+        );
+      } else {
+        setErrorMessage("An unexpected error occurred. Please try again.");
+      }
+    }
+
+    setEmail("");
+    setPassword("");
+    setfirstname("");
+    setlastname("");
+  };
+
   return (
-    <div className="p-7 flex h-screen  justify-between flex-col">
+    <div className="p-7 flex h-screen justify-between flex-col">
       <div>
         <img
-          className="w-16 "
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnwMYH1XD2GttzuM0e34CUowGWvV9GPfcwWw&s"
+          className="w-16"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Uber_logo_2018.png/1200px-Uber_logo_2018.png"
           alt=""
         />
       </div>
@@ -40,7 +69,7 @@ const [userData, setUserData] = useState({});
         <div className="flex gap-4 mb-4">
           <input
             required
-            type="name"
+            type="text"
             placeholder="First Name"
             className="bg-[#eeeeee] rounded border px-4 py-2 w-1/2 text-lg placeholder:text-base"
             value={firstname}
@@ -50,14 +79,14 @@ const [userData, setUserData] = useState({});
           />
           <input
             required
-            type="name"
+            type="text"
             placeholder="Last Name"
-            className="bg-[#eeeeee]  rounded border px-4 py-2 w-1/2 text-lg placeholder:text-base"
+            className="bg-[#eeeeee] rounded border px-4 py-2 w-1/2 text-lg placeholder:text-base"
             value={lastname}
             onChange={(e) => {
               setlastname(e.target.value);
             }}
-         />
+          />
         </div>
         <h3 className="text-xl mb-2 font-medium">What's your email</h3>
         <input
@@ -72,6 +101,7 @@ const [userData, setUserData] = useState({});
         />
         <h3 className="text-xl mb-2 font-medium">What's your password</h3>
         <input
+          required
           type="password"
           placeholder="password"
           className="bg-[#eeeeee] mb-5 rounded border px-4 py-2 w-full text-lg placeholder:text-base"
@@ -80,18 +110,21 @@ const [userData, setUserData] = useState({});
             setPassword(e.target.value);
           }}
         />
-
-        <button className="bg-black text-white cursor-pointer mb-2 font-semibold rounded  px-4 py-2 w-full text-lg ">
+        {errorMessage && (
+          <p className="text-red-500 text-sm">{errorMessage}</p>
+        )}{" "}
+        {/* Display error messages */}
+        <button className="bg-black text-white cursor-pointer mb-2 font-semibold rounded px-4 py-2 w-full text-lg">
           SignUp
         </button>
-        <p className="text-center ">
-          get Ride? 
+        <p className="text-center">
+          Get Ride?{" "}
           <Link to={"/Login"} className="text-blue-600">
-             Already SignIn
+            Already SignIn
           </Link>
         </p>
       </form>
-      <p className="text-[8px] leading-tight ">
+      <p className="text-[8px] leading-tight">
         Uber guidelines for drivers primarily focus on safety, respect, and
         adhering to platform rules. This includes adhering to traffic laws,
         respecting personal space, and reporting any incidents or safety
@@ -99,7 +132,6 @@ const [userData, setUserData] = useState({});
       </p>
     </div>
   );
-  }
-
+};
 
 export default UserSignup;

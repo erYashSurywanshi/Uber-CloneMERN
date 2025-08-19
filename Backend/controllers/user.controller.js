@@ -15,11 +15,6 @@ module.exports.registerUser= async (req,res,next)=>{
     
     const {fullname,email,password}= req.body;
 
-    const userExist = await captainModel.findOne({email});
-        if(userExist){
-            return res.status(409).json({error: "Captain already exists"});
-        }
-        
     // Check if user with email already exists
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
@@ -50,14 +45,14 @@ module.exports.loginUser= async (req,res,next)=>{
 
     const {email,password}= req.body;
 
-    // Use userModel.findOne if userService.findUserByEmail is not implemented
-
     const user = await userModel.findOne({email}).select('+password');
     
-    
+    if (!user) {
+        return res.status(401).json({ message: "Invalid email or password" });
+    }
 
     // Use bcrypt to compare password
-    const isMatch = await user.comparePassword(password, user.password);
+    const isMatch = await user.comparePassword(password);
 
     if(!isMatch){
         return res.status(401).json({message:"Invalid email or password"});

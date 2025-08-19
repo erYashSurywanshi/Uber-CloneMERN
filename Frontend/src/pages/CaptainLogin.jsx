@@ -1,21 +1,38 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'  
-
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import { useCaptain } from "../Context/CaptainContext"; // Import the custom hook
 
 const CaptainLogin = () => {
+
+  const navigate = useNavigate();
+  const { setCaptain } = useCaptain(); // Use the custom hook to access context
+
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [captainData, setCaptainrData] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    setCaptainrData({
+    const captain ={
       email: email,
       password: password,
-    });
+    }
 
-    console.log(captainData);
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/captains/login`, captain)
+    if(response.status === 200){
+      const data = response.data;
+      setCaptain(data.captain);
+      localStorage.setItem("token", data.token); // Store token in local storage
+      navigate("/captain-home"); // Redirect to captain home on success
+    }
+    else{
+      console.log("error")
+    }
+    
     setEmail("");
     setPassword("");
   };
