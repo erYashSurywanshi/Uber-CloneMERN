@@ -115,7 +115,7 @@ const CaptainSignup = () => {
           value={email}
           onChange={(e) => {
             setEmail(e.target.value.toLowerCase());
-          }}
+          }} 
         />
         <h3 className="text-lg mb-1 font-medium">What's your password</h3>
         <input
@@ -182,8 +182,7 @@ const CaptainSignup = () => {
               <option value="car">Car</option> {/* Updated to match backend enum */}
               <option value="bike">Bike</option> {/* Updated to match backend enum */}
               <option value="auto">Auto</option> {/* Updated to match backend enum */}
-              <option value="moto">Auto</option> {/* Updated to match backend enum */}
-
+            
             </select>
           </div>
         </div>

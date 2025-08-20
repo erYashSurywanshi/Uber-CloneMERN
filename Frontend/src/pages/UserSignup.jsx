@@ -44,6 +44,10 @@ const UserSignup = () => {
         setErrorMessage(
           error.response.data.errors.map((err) => err.msg).join(", ")
         );
+      } else if (error.response && error.response.status === 409) {
+        setErrorMessage("Email already registered.");
+      } else if (error.response && error.response.status === 500) {
+        setErrorMessage("Internal Server Error. Please try again later.");
       } else {
         setErrorMessage("An unexpected error occurred. Please try again.");
       }
@@ -112,8 +116,7 @@ const UserSignup = () => {
         />
         {errorMessage && (
           <p className="text-red-500 text-sm">{errorMessage}</p>
-        )}{" "}
-        {/* Display error messages */}
+        )}
         <button className="bg-black text-white cursor-pointer mb-2 font-semibold rounded px-4 py-2 w-full text-lg">
           SignUp
         </button>

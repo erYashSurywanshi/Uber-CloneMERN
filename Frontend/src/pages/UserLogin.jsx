@@ -7,6 +7,7 @@ const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userData, setUserData] = useState({});
+  const [errorMessage, setErrorMessage] = useState(""); // Add state for error messages
 
   const { setUser } = useContext(UserDataContext); // Fixed UserContext usage
 
@@ -34,6 +35,13 @@ const UserLogin = () => {
       }
     } catch (error) {
       console.error("Error during signup:", error); // Log full error details
+      if (error.response && error.response.status === 500) {
+        setErrorMessage("Internal Server Error. Please try again later.");
+      } else if (error.response && error.response.data.message) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage("Invalid email or password");
+      }
     }
     setEmail("");
     setPassword("");
@@ -74,6 +82,9 @@ const UserLogin = () => {
         <button className="bg-black text-white cursor-pointer mb-2 font-semibold rounded  px-4 py-2 w-full text-lg ">
           Login
         </button>
+        {errorMessage && (
+          <p className="text-red-500 text-sm">{errorMessage}</p>
+        )}
         <p className="text-center ">
           {" "}
           New Here?{" "}

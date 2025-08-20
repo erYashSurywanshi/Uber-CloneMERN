@@ -13,8 +13,9 @@ const VehiclePanle = (props) => {
       </h5>
       <h3 className="text-lg font-semibold">Select your Vehicle</h3>
       <div onClick={()=>{
+        props.setvehicleType('car')
         props.setconfirmRidePanle(true)
-        props.setvehiclePanel(false)
+
       }} className="flex w-full bg-gray-50 mt-5 rounded-xl items-center justify-between px-1 py-1 cursor-pointer active:border-3 active:border-black">
         <img
           className="h-10"
@@ -33,11 +34,12 @@ const VehiclePanle = (props) => {
             Affordable, compact rides
           </p>
         </div>
-        <h2 className="text-xl font-semibold">$193.20</h2>
+        <h2 className="text-xl font-semibold">₹{props.fare.car}</h2>
       </div>
       <div onClick={()=>{
+        props.setvehicleType('bike')
         props.setconfirmRidePanle(true)
-        props.setvehiclePanel(false)
+   
       }} className="flex w-full bg-gray-50 mt-2 rounded-xl items-center justify-between px-1 py-1 cursor-pointer active:border-3 active:border-black">
         <img
           className="h-10 mx-4"
@@ -56,12 +58,12 @@ const VehiclePanle = (props) => {
             Affordable, compact rides
           </p>
         </div>
-        <h2 className="text-xl font-semibold">$93.10</h2>
+        <h2 className="text-xl font-semibold">₹{props.fare.bike}</h2>
       </div>
       <div onClick={()=>{
+        props.setvehicleType('auto')
         props.setconfirmRidePanle(true)
-        props.setvehiclePanel(false)
-
+       
       }} className="flex w-full bg-gray-50 mt-2 rounded-xl items-center justify-between px-1 py-1 cursor-pointer active:border-3 active:border-black">
         <img
           className="h-10 mx-4"
@@ -80,7 +82,7 @@ const VehiclePanle = (props) => {
             Affordable, compact rides
           </p>
         </div>
-        <h2 className="text-xl font-semibold">$140.50</h2>
+        <h2 className="text-xl font-semibold">₹{props.fare.auto}</h2>
       </div>
     </div>
   );

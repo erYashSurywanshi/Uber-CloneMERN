@@ -20,7 +20,9 @@ const blacklisted = await blacklistedTokenModel.findOne({ token: token });
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await userModel.findById(decoded._id)
-        
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
         req.user = user;
         return next();
 

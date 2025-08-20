@@ -402,3 +402,97 @@ Logs out the current captain by invalidating the JWT token.
 
 -   Requires a valid JWT token in the `Authorization` header.
 -   The JWT token is blacklisted after logout.
+
+---
+
+## POST `/rides/create-ride`
+Creates a new ride.
+
+### Request Body
+```json
+{
+  "pickup": "string (min 3 chars, required)",
+  "destination": "string (min 3 chars, required)",
+  "vehicleType": "string (one of 'auto', 'car', 'bike', required)"
+}
+```
+
+### Responses
+- **201 Created**: Ride created successfully.
+- **400 Bad Request**: Validation errors.
+- **500 Internal Server Error**: Something went wrong.
+
+## GET `/maps/get-coordinates`
+Retrieves geographic coordinates for a given address.
+
+### Query Parameters
+- `address`: string (min 3 chars, required)
+
+### Responses
+- **200 OK**: Returns the coordinates.
+- **400 Bad Request**: Validation errors.
+
+## GET `/maps/get-distance-time`
+Retrieves the distance and travel time between two locations.
+
+### Query Parameters
+- `origin`: string (min 3 chars, required)
+- `destination`: string (min 3 chars, required)
+
+### Responses
+- **200 OK**: Returns distance and time.
+- **400 Bad Request**: Validation errors.
+
+## GET `/maps/get-suggestions`
+Retrieves address suggestions based on user input.
+
+### Query Parameters
+- `input`: string (min 3 chars, required)
+
+### Responses
+- **200 OK**: Returns address suggestions.
+- **400 Bad Request**: Validation errors.
+
+---
+
+## GET `/rides/get-fare`
+
+### Description
+Retrieves estimated fare for a ride based on pickup and destination locations.
+
+### Query Parameters
+- `pickup`: string (min 3 chars, required)
+- `destination`: string (min 3 chars, required)
+
+### Example Request
+```
+GET /rides/get-fare?pickup=Times Square&destination=Central Park
+```
+
+### Responses
+- **200 OK**: Returns fare estimates for all vehicle types.
+  ```json
+  {
+    "fare": {
+      "auto": 150,
+      "car": 250,
+      "bike": 100
+    }
+  }
+  ```
+- **400 Bad Request**: Validation errors.
+  ```json
+  {
+    "errors": ["Error details here"]
+  }
+  ```
+- **500 Internal Server Error**: Something went wrong.
+  ```json
+  {
+    "error": "Internal Server Error"
+  }
+  ```
+
+### Notes
+- Requires authentication via JWT token
+- Fare calculation includes base fare, distance-based rate, and time-based rate

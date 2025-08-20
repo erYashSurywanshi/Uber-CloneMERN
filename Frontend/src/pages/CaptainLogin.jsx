@@ -46,7 +46,7 @@ const CaptainLogin = () => {
         alt=""
       />
     </div>
-    <form onSubmit={handleSubmit} className='mb-26'>
+    <form onSubmit={handleSubmit} className='mb-26 '>
       <h3 className="text-xl mb-2 font-medium">What's your email</h3>
       <input
         value={email}
@@ -79,12 +79,13 @@ const CaptainLogin = () => {
         Create Rider Account 
         </Link>
       </p>
-    </form>
-    <Link
+      <Link
     to={"/Login"}
-     className="bg-[#a79905] flex items-center justify-center text-white cursor-pointer mb-4 font-semibold rounded  px-4 py-2 w-full text-lg ">
+     className="bg-[#a79905] flex items-center justify-center text-white cursor-pointer  mt-30 font-semibold rounded  px-4 py-2 w-full text-lg ">
       SignIn as User
     </Link>
+    </form>
+    
   </div>
   )
 }

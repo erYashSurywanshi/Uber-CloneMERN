@@ -76,31 +76,21 @@ Frontend/
 - **GSAP Animations**: Smooth animations for UI transitions.
 - **Dynamic Panels**: Includes panels for vehicle selection, ride confirmation, driver search, and waiting for the driver.
 
+## Recent Progress
+
+- Implemented dynamic panels in `Home.jsx` for a better user experience:
+  - **Location Search Panel**: Allows users to search for pickup and destination locations.
+  - **Vehicle Selection Panel**: Allows users to select a vehicle type (car, bike, auto) and displays the estimated fare.
+  - **Ride Confirmation Panel**: Confirms the ride details, including pickup and destination locations, vehicle type, and fare.
+  - **Looking for Driver Panel**: Displays the status of finding a driver.
+  - **Waiting for Driver Panel**: Displays the assigned driver's details and status.
+- Integrated `WaittingforDriver` component into `Home.jsx` to complete the ride flow.
+- Enhanced animations using GSAP for smoother transitions between panels.
+- Improved data flow by passing `pickup`, `destination`, and `fare` as props to the `ConfirmRIde` component.
+- Ensured correct fare display in the `ConfirmRIde` component by accessing the fare using `props.fare[props.vehicleType]`.
+- Handled the selection of vehicle type in `VehiclePanle` and updated the state in `Home.jsx` accordingly.
+
 ## Notes
 
 - Ensure the backend server is running to test API integrations.
 - Update the API base URL in the application if necessary.
-
-## Recent Updates
-
-- Added `WaittingforDriver` component for displaying the waiting status for a driver.
-- Integrated `WaittingforDriver` into `Home.jsx` to complete the ride flow.
-- Enhanced animations using GSAP for smoother transitions between panels.
-- Updated `Home.jsx` to include dynamic panels for better user experience, including:
-  - **Vehicle Selection Panel**: Allows users to select a vehicle.
-  - **Ride Confirmation Panel**: Confirms the ride details.
-  - **Looking for Driver Panel**: Displays the status of finding a driver.
-  - **Waiting for Driver Panel**: Displays the assigned driver's details and status.
-
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
