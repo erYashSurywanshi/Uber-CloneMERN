@@ -31,7 +31,7 @@ const blacklisted = await blacklistedTokenModel.findOne({ token: token });
     }
 }
 
-module.exports.authCaptian = async (req, res, next) => {
+module.exports.authCaptain = async (req, res, next) => {
     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
 
     if (!token) {

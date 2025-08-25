@@ -1,6 +1,10 @@
 import React from 'react'
-
+import { useContext } from 'react'
+import { CaptainDataContext } from '../Context/CaptainContext'
 const CaptainDetails = () => {
+
+  const {captain} = useContext(CaptainDataContext)
+
   return (
     <div>
         
@@ -11,7 +15,7 @@ const CaptainDetails = () => {
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMPzLVxq8WlBGZAf34OFPazsc5atyoQaUACw&s"
           alt=""
         />
-      <h3 className='font-semibold' >Himtesh Pawar</h3>
+      <h3 className='font-semibold capitalize' >{captain.fullname.firstname+ " " + captain.fullname.lastname}</h3>
     </div>
       <div>
         <h3 className='mt-3 font-bold'>₹194.33</h3>

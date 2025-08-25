@@ -6,6 +6,9 @@ import VehiclePanle from "../components/VehiclePanle";
 import ConfirmRIde from "../components/ConfirmRIde";
 import LookingForDriver from "../components/LookingForDriver";
 import WaittingforDriver from "../components/WaittingforDriver";
+import  {SocketContext}  from "../Context/SocketContext";
+import { useContext } from "react";
+import { UserDataContext } from "../Context/UserContext";
 import axios from "axios";
 
 const Home = () => {
@@ -27,6 +30,16 @@ const Home = () => {
   const vehiclePanelRef = useRef(null);
   const panelref = useRef(null);
   const panelcloseref = useRef(null);
+
+
+  const {socket} = useContext(SocketContext);
+  const {user} = useContext(UserDataContext);
+
+  useEffect(()=>{
+
+    console.log('User info in Home component:', user);
+    socket.emit('join', {usertype:'user', userid:user._id});
+  },[user])
 
   const handlePickupChange = async (e) => {
     const value = e.target.value;
